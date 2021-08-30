@@ -1,14 +1,15 @@
 import {
-  JsonController,
-  Get,
-  QueryParam,
-} from 'routing-controllers';
+  interfaces,
+  controller,
+  httpGet,
+  queryParam,
+} from 'inversify-express-utils';
 
-@JsonController('/recognition')
-export class MusicRecognitionController {
-  @Get()
+@controller('/recognition')
+export class MusicRecognitionController implements interfaces.Controller {
+  @httpGet('/')
   public recognizeMusic(
-    @QueryParam('url') url: string,
+    @queryParam('url') url: string,
   ): { url: string } {
     return {
       url,

@@ -1,13 +1,18 @@
-import path from 'path';
 import 'reflect-metadata';
-import { Application } from 'express';
-import { createExpressServer } from 'routing-controllers';
+import { json, urlencoded } from 'express';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import { container } from './container';
 
-const app: Application = createExpressServer({
-  routePrefix: 'api',
-  controllers: [
-    path.join(__dirname, '/modules/**/*.controller.*'),
-  ],
+import './modules/music-recognition/music-recognition.controller';
+
+const server = new InversifyExpressServer(container);
+
+server.setConfig((app) => {
+  app.use(json());
+  app.use(urlencoded({ extended: true }));
 });
 
-app.listen(5000);
+const app = server.build();
+app.listen(5000, () => {
+  console.log('App is running');
+});
