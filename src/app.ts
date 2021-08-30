@@ -1,11 +1,13 @@
-import express, { Request, Response } from 'express';
+import path from 'path';
+import 'reflect-metadata';
+import { Application } from 'express';
+import { createExpressServer } from 'routing-controllers';
 
-const app = express();
-
-app.get('/', (request: Request, response: Response) => {
-  response.send('Hello World!');
+const app: Application = createExpressServer({
+  routePrefix: 'api',
+  controllers: [
+    path.join(__dirname, '/modules/**/*.controller.*'),
+  ],
 });
 
-app.listen(5000, () => {
-  console.log('App is running');
-});
+app.listen(5000);
