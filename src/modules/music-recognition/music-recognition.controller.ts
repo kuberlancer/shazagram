@@ -6,7 +6,7 @@ import {
   queryParam,
 } from 'inversify-express-utils';
 import { MUSIC_RECOGNITION_SERVICE } from '../../constants';
-import { IMusicRecognitionService } from './music-recognition.interface';
+import { IMusicRecognitionService, MusicDetail } from './music-recognition.interface';
 
 @controller('/recognition')
 export class MusicRecognitionController implements interfaces.Controller {
@@ -16,9 +16,7 @@ export class MusicRecognitionController implements interfaces.Controller {
   ) {}
 
   @httpGet('/')
-  public recognizeMusic(@queryParam('url') url: string): { url: string } {
-    return {
-      url: this.musicRecognitionService.getName(url),
-    };
+  public recognizeMusic(@queryParam('url') url: string): MusicDetail {
+    return this.musicRecognitionService.getDetail(url);
   }
 }

@@ -1,3 +1,11 @@
+export interface MusicDetail {
+  name: string;
+}
+
 export interface IMusicRecognitionService {
-  getName(url: string): string;
+  getDetail(url: string): MusicDetail;
+}
+
+export interface IMusicRecognitionStrategy {
+  isAppropriateStrategy(url: string): boolean;
 }
