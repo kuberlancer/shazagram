@@ -5,7 +5,3 @@ export interface MusicDetail {
 export interface IMusicRecognitionService {
   getDetail(url: string): MusicDetail;
 }
-
-export interface IMusicRecognitionStrategy {
-  isAppropriateStrategy(url: string): boolean;
-}
