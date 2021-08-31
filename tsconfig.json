@@ -4,7 +4,8 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"types": [
-			"reflect-metadata"
+			"reflect-metadata",
+			"jest"
 		],
 		"module": "commonjs",
 		"strict": true,
