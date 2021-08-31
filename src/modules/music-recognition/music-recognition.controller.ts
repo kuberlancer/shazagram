@@ -1,9 +1,14 @@
 import { inject } from 'inversify';
 import {
+  Request,
+} from 'express';
+import {
   interfaces,
   controller,
   httpGet,
   queryParam,
+  httpPost,
+  request,
 } from 'inversify-express-utils';
 import {
   MUSIC_RECOGNITION_SERVICE,
@@ -27,12 +32,18 @@ export class MusicRecognitionController implements interfaces.Controller {
     private readonly musicRecognitionService: IMusicRecognitionService,
   ) {}
 
+  @httpPost('/')
+  public upload(@request() req: Request): MusicDetail {
+    return {
+      name: 'Unknown',
+    };
+  }
+
   @httpGet('/')
   public recognizeMusic(@queryParam('url') url: string): MusicDetail {
     if (this.remoteVideoExtractorService.isLink(url)) {
       console.log(`It's a link: ${url}`);
     }
-    console.log('qweqw');
     return this.musicRecognitionService.getDetail(url);
   }
 }

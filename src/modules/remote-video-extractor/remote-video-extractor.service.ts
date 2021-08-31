@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { YOUTUBE_VIDEO_EXTRACTOR_SERVICE } from 'src/constants';
+import { YOUTUBE_VIDEO_EXTRACTOR_SERVICE } from '../../constants';
 import {
   IRemoteVideoExtractorService,
   IRemoteVideoExtractorStrategy,

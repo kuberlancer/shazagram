@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import multer from 'multer';
 import { json, urlencoded } from 'express';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { container } from './container';
@@ -10,6 +11,7 @@ const server = new InversifyExpressServer(container);
 server.setConfig((app) => {
   app.use(json());
   app.use(urlencoded({ extended: true }));
+  app.use(multer().single('music'));
 });
 
 const app = server.build();
