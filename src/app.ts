@@ -11,7 +11,9 @@ const server = new InversifyExpressServer(container);
 server.setConfig((app) => {
   app.use(json());
   app.use(urlencoded({ extended: true }));
-  app.use(multer().single('music'));
+  app.use(multer({
+    dest: `${__dirname}/uploads`,
+  }).single('music'));
 });
 
 const app = server.build();

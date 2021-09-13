@@ -5,8 +5,6 @@ import {
 import {
   interfaces,
   controller,
-  httpGet,
-  queryParam,
   httpPost,
   request,
 } from 'inversify-express-utils';
@@ -34,16 +32,14 @@ export class MusicRecognitionController implements interfaces.Controller {
 
   @httpPost('/')
   public upload(@request() req: Request): MusicDetail {
+    let detail: MusicDetail;
+
+    if (req.file) {
+      detail = this.musicRecognitionService.getDetail(req.file);
+    }
+
     return {
       name: 'Unknown',
     };
-  }
-
-  @httpGet('/')
-  public recognizeMusic(@queryParam('url') url: string): MusicDetail {
-    if (this.remoteVideoExtractorService.isLink(url)) {
-      console.log(`It's a link: ${url}`);
-    }
-    return this.musicRecognitionService.getDetail(url);
   }
 }
