@@ -31,15 +31,10 @@ export class MusicRecognitionController implements interfaces.Controller {
   ) {}
 
   @httpPost('/')
-  public upload(@request() req: Request): MusicDetail {
-    let detail: MusicDetail;
-
-    if (req.file) {
-      detail = this.musicRecognitionService.getDetail(req.file);
+  public async upload(@request() req: Request): Promise<MusicDetail> {
+    if (!req.file) {
+      throw new Error('file is not passed');
     }
-
-    return {
-      name: 'Unknown',
-    };
+    return this.musicRecognitionService.getDetail(req.file);
   }
 }

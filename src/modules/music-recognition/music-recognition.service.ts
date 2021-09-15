@@ -1,7 +1,7 @@
 import { Express } from 'express';
 import { inject, injectable } from 'inversify';
 import {
-  AUDD_MUSIC_RECOGNITION_SERVICE,
+  SHAZAM_MUSIC_RECOGNITION_SERVICE,
 } from '../../constants';
 import {
   IMusicRecognitionService,
@@ -12,14 +12,11 @@ import {
 @injectable()
 export class MusicRecognitionService implements IMusicRecognitionService {
   constructor(
-    @inject(AUDD_MUSIC_RECOGNITION_SERVICE)
-    private readonly auddMusicRecognitionService: IMusicRecognitionStrategy,
+    @inject(SHAZAM_MUSIC_RECOGNITION_SERVICE)
+    private readonly shazamMusicRecognitionService: IMusicRecognitionStrategy,
   ) {}
 
-  getDetail(file: Express.Multer.File): MusicDetail {
-    const detail = this.auddMusicRecognitionService.getDetail(file);
-    return {
-      name: 'Unknown music',
-    };
+  async getDetail(file: Express.Multer.File): Promise<MusicDetail> {
+    return this.shazamMusicRecognitionService.getDetail(file);
   }
 }

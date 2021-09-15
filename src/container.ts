@@ -1,8 +1,8 @@
 import { Container } from 'inversify';
 import {
-  AUDD_MUSIC_RECOGNITION_SERVICE,
   MUSIC_RECOGNITION_SERVICE,
   REMOTE_VIDEO_EXTRACTOR_SERVICE,
+  SHAZAM_MUSIC_RECOGNITION_SERVICE,
   YOUTUBE_VIDEO_EXTRACTOR_SERVICE,
 } from './constants';
 import {
@@ -12,7 +12,7 @@ import {
 import {
   MusicRecognitionService,
 } from './modules/music-recognition/music-recognition.service';
-import { AudDMusicRecognitionService } from './modules/music-recognition/strategies/audd-music-recognition.service';
+import { ShazamMusicRecognitionService } from './modules/music-recognition/strategies/shazam-music-recognition.service';
 import {
   IRemoteVideoExtractorService,
   IRemoteVideoExtractorStrategy,
@@ -40,8 +40,8 @@ container
   .inSingletonScope();
 
 container
-  .bind<IMusicRecognitionStrategy>(AUDD_MUSIC_RECOGNITION_SERVICE)
-  .to(AudDMusicRecognitionService)
+  .bind<IMusicRecognitionStrategy>(SHAZAM_MUSIC_RECOGNITION_SERVICE)
+  .to(ShazamMusicRecognitionService)
   .inSingletonScope();
 
 export { container };
