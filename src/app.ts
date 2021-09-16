@@ -13,6 +13,9 @@ server.setConfig((app) => {
   app.use(urlencoded({ extended: true }));
   app.use(multer({
     dest: `${__dirname}/uploads`,
+    limits: {
+      fileSize: 4e+7,
+    },
   }).single('music'));
 });
 

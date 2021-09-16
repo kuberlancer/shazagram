@@ -1,3 +1,5 @@
+import { unlink } from 'fs';
+import { promisify } from 'util';
 import { Express } from 'express';
 import { inject, injectable } from 'inversify';
 import {
@@ -9,6 +11,8 @@ import {
   MusicDetail,
 } from './music-recognition.interface';
 
+const unlinkAsync = promisify(unlink);
+
 @injectable()
 export class MusicRecognitionService implements IMusicRecognitionService {
   constructor(
@@ -17,6 +21,8 @@ export class MusicRecognitionService implements IMusicRecognitionService {
   ) {}
 
   async getDetail(file: Express.Multer.File): Promise<MusicDetail> {
-    return this.shazamMusicRecognitionService.getDetail(file);
+    const detail = await this.shazamMusicRecognitionService.getDetail(file);
+    await unlinkAsync(file.path);
+    return detail;
   }
 }

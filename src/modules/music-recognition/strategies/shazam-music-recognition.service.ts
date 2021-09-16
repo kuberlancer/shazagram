@@ -8,7 +8,7 @@ import {
   MusicDetail,
 } from '../music-recognition.interface';
 
-const asyncExec = promisify(exec);
+const execAsync = promisify(exec);
 
 @injectable()
 export class ShazamMusicRecognitionService implements IMusicRecognitionStrategy {
@@ -18,7 +18,7 @@ export class ShazamMusicRecognitionService implements IMusicRecognitionStrategy 
     const {
       stdout,
       stderr,
-    } = await asyncExec(`songrec audio-file-to-recognized-song ${filePath}`);
+    } = await execAsync(`songrec audio-file-to-recognized-song ${filePath}`);
 
     if (stderr) console.error('Error:', stderr);
 
