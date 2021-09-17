@@ -1,10 +1,13 @@
 import 'reflect-metadata';
+import dotenv from 'dotenv';
 import multer from 'multer';
 import { json, urlencoded } from 'express';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { container } from './container';
 
 import './modules/music-recognition/music-recognition.controller';
+
+dotenv.config();
 
 const server = new InversifyExpressServer(container);
 

@@ -1,10 +1,15 @@
 import { Container } from 'inversify';
 import {
+  APP_CONFIG_SERVICE,
   MUSIC_RECOGNITION_SERVICE,
   REMOTE_VIDEO_EXTRACTOR_SERVICE,
   SHAZAM_MUSIC_RECOGNITION_SERVICE,
   YOUTUBE_VIDEO_EXTRACTOR_SERVICE,
 } from './constants';
+import {
+  IAppConfigService,
+} from './modules/app-config/app-config.interface';
+import { AppConfigService } from './modules/app-config/app-config.service';
 import {
   IMusicRecognitionService,
   IMusicRecognitionStrategy,
@@ -42,6 +47,11 @@ container
 container
   .bind<IMusicRecognitionStrategy>(SHAZAM_MUSIC_RECOGNITION_SERVICE)
   .to(ShazamMusicRecognitionService)
+  .inSingletonScope();
+
+container
+  .bind<IAppConfigService>(APP_CONFIG_SERVICE)
+  .to(AppConfigService)
   .inSingletonScope();
 
 export { container };
