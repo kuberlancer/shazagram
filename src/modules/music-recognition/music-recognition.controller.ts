@@ -14,7 +14,7 @@ import {
 } from '../../constants';
 import {
   IRemoteVideoExtractorService,
-} from '../remote-video-extractor/remote-video-extractor.interface';
+} from '../remote-video-extractor';
 import {
   IMusicRecognitionService,
   MusicDetail,

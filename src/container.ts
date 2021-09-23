@@ -8,24 +8,20 @@ import {
 } from './constants';
 import {
   IAppConfigService,
-} from './modules/app-config/app-config.interface';
-import { AppConfigService } from './modules/app-config/app-config.service';
+  AppConfigService,
+} from './modules/app-config';
 import {
   IMusicRecognitionService,
   IMusicRecognitionStrategy,
-} from './modules/music-recognition/music-recognition.interface';
-import {
   MusicRecognitionService,
-} from './modules/music-recognition/music-recognition.service';
-import { ShazamMusicRecognitionService } from './modules/music-recognition/strategies/shazam-music-recognition.service';
+  ShazamMusicRecognitionService,
+} from './modules/music-recognition';
 import {
   IRemoteVideoExtractorService,
   IRemoteVideoExtractorStrategy,
-} from './modules/remote-video-extractor/remote-video-extractor.interface';
-import { RemoteVideoExtractorService } from './modules/remote-video-extractor/remote-video-extractor.service';
-import {
+  RemoteVideoExtractorService,
   YoutubeVideoExtractorService,
-} from './modules/remote-video-extractor/strategies/youtube-video-extractor.service';
+} from './modules/remote-video-extractor';
 
 const container = new Container();
 

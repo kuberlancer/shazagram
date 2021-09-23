@@ -7,7 +7,7 @@ import request from 'supertest';
 import { cleanUpMetadata, InversifyExpressServer } from 'inversify-express-utils';
 import { Application, json, urlencoded } from 'express';
 import { container } from '../container';
-import { MusicDetail } from '../modules/music-recognition/music-recognition.interface';
+import { MusicDetail } from '../modules/music-recognition';
 
 import '../modules/music-recognition/music-recognition.controller';
 
