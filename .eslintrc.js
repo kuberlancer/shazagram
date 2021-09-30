@@ -26,6 +26,7 @@ module.exports = {
     'react/jsx-one-expression-per-line': 'off',
     'react/destructuring-assignment': 'off',
     'react/prop-types': 'off',
+    'func-names': 'off',
     'max-classes-per-file': 'off',
     'no-underscore-dangle': 'off',
     'no-param-reassign': 'off',
