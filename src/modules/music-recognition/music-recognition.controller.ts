@@ -35,6 +35,6 @@ export class MusicRecognitionController implements interfaces.Controller {
     if (!req.file) {
       throw new Error('file is not passed');
     }
-    return this.musicRecognitionService.getDetail(req.file);
+    return this.musicRecognitionService.getDetail(req.file.path);
   }
 }

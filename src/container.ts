@@ -7,11 +7,17 @@ import {
   SHAZAM_MUSIC_RECOGNITION_SERVICE,
   YOUTUBE_VIDEO_EXTRACTOR_SERVICE,
   TELEGRAM_BOT_CONTROLLER,
+  TELEGRAM_BOT_SERVICE,
+  FILE_DOWNLOADER_SERVICE,
 } from './constants';
 import {
   IAppConfigService,
   AppConfigService,
 } from './modules/app-config';
+import {
+  IFileDownloaderService,
+  FileDownloaderService,
+} from './modules/file-downloader';
 import {
   IMusicRecognitionService,
   IMusicRecognitionStrategy,
@@ -26,7 +32,9 @@ import {
   YoutubeVideoExtractorService,
 } from './modules/remote-video-extractor';
 import {
+  ITelegramBotService,
   TelegramBotController,
+  TelegramBotService,
 } from './modules/telegram-bot';
 
 const container = new Container();
@@ -64,6 +72,16 @@ container
 container
   .bind<IAppConfigService>(APP_CONFIG_SERVICE)
   .to(AppConfigService)
+  .inSingletonScope();
+
+container
+  .bind<ITelegramBotService>(TELEGRAM_BOT_SERVICE)
+  .to(TelegramBotService)
+  .inSingletonScope();
+
+container
+  .bind<IFileDownloaderService>(FILE_DOWNLOADER_SERVICE)
+  .to(FileDownloaderService)
   .inSingletonScope();
 
 export { container };

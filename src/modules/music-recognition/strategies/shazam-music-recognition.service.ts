@@ -1,5 +1,4 @@
 import { promisify } from 'util';
-import path from 'path';
 import { injectable } from 'inversify';
 import { exec } from 'child_process';
 import {
@@ -12,9 +11,7 @@ const execAsync = promisify(exec);
 
 @injectable()
 export class ShazamMusicRecognitionService implements IMusicRecognitionStrategy {
-  public async getDetail(file: Express.Multer.File): Promise<MusicDetail> {
-    const filePath = path.normalize(file.path);
-
+  public async getDetail(filePath: string): Promise<MusicDetail> {
     const {
       stdout,
       stderr,

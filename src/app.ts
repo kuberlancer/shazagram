@@ -6,7 +6,11 @@ import { InversifyExpressServer } from 'inversify-express-utils';
 import { Telegraf } from 'telegraf';
 import { container } from './container';
 import { IAppConfigService } from './modules/app-config';
-import { APP_CONFIG_SERVICE, TELEGRAM_BOT_CONTROLLER } from './constants';
+import {
+  APP_CONFIG_SERVICE,
+  TELEGRAM_BOT_CONTROLLER,
+  UPLOAD_FOLDER,
+} from './constants';
 import { registerBotController } from './utils';
 
 dotenv.config();
@@ -26,7 +30,7 @@ server.setConfig((app) => {
   app.use(json());
   app.use(urlencoded({ extended: true }));
   app.use(multer({
-    dest: `${__dirname}/uploads`,
+    dest: UPLOAD_FOLDER,
     limits: {
       fileSize: 4e+7,
     },

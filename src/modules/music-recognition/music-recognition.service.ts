@@ -1,6 +1,5 @@
 import { unlink } from 'fs';
 import { promisify } from 'util';
-import { Express } from 'express';
 import { inject, injectable } from 'inversify';
 import {
   SHAZAM_MUSIC_RECOGNITION_SERVICE,
@@ -20,9 +19,9 @@ export class MusicRecognitionService implements IMusicRecognitionService {
     private readonly shazamMusicRecognitionService: IMusicRecognitionStrategy,
   ) {}
 
-  async getDetail(file: Express.Multer.File): Promise<MusicDetail> {
-    const detail = await this.shazamMusicRecognitionService.getDetail(file);
-    await unlinkAsync(file.path);
+  async getDetail(filePath: string): Promise<MusicDetail> {
+    const detail = await this.shazamMusicRecognitionService.getDetail(filePath);
+    await unlinkAsync(filePath);
     return detail;
   }
 }

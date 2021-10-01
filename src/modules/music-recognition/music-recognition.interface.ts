@@ -1,5 +1,3 @@
-import { Express } from 'express';
-
 export interface MusicDetail {
   subtitle: string;
   title: string;
@@ -15,9 +13,9 @@ export interface MatchResult {
 }
 
 export interface IMusicRecognitionService {
-  getDetail(file: Express.Multer.File): Promise<MusicDetail>;
+  getDetail(filePath: string): Promise<MusicDetail>;
 }
 
 export interface IMusicRecognitionStrategy {
-  getDetail(file: Express.Multer.File): Promise<MusicDetail>;
+  getDetail(filePath: string): Promise<MusicDetail>;
 }
