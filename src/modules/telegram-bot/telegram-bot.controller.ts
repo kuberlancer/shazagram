@@ -1,12 +1,15 @@
 import { inject } from 'inversify';
 import { Context } from 'telegraf';
+import { Message } from 'typegram';
 import {
   FILE_DOWNLOADER_SERVICE,
   MUSIC_RECOGNITION_SERVICE,
+  REMOTE_VIDEO_EXTRACTOR_SERVICE,
   TELEGRAM_BOT_SERVICE,
 } from '../../constants';
 import { IFileDownloaderService } from '../file-downloader';
 import { IMusicRecognitionService } from '../music-recognition';
+import { IRemoteVideoExtractorService } from '../remote-video-extractor';
 import {
   botController,
   on,
@@ -24,11 +27,26 @@ export class TelegramBotController {
 
     @inject(FILE_DOWNLOADER_SERVICE)
     private readonly fileDownloaderService: IFileDownloaderService,
+
+    @inject(REMOTE_VIDEO_EXTRACTOR_SERVICE)
+    private readonly remoteVideoExtractorService: IRemoteVideoExtractorService,
   ) {}
 
   @on('text')
-  public receiveText(context: Context): void {
-    context.replyWithHTML('<b>Hello</b>');
+  public async receiveTextLink(context: Context): Promise<void> {
+    try {
+      if (context.message && (context.message as Message.TextMessage).text) {
+        const textLink = (context.message as Message.TextMessage).text;
+        const filePath = await this.remoteVideoExtractorService.extract(textLink);
+        const detail = await this.musicRecognitionService.getDetail(filePath);
+        const response = this.telegramBotService.detailToHTML(detail);
+        context.replyWithHTML(response);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+      context.replyWithHTML('Error');
+    }
   }
 
   @on('message')
@@ -44,7 +62,8 @@ export class TelegramBotController {
         return;
       }
     } catch (error) {
-      context.replyWithHTML(String(error));
+      console.log(error);
+      context.replyWithHTML('Error');
     }
   }
 }

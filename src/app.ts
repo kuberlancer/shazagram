@@ -26,6 +26,9 @@ bot.telegram.setWebhook(config.API_URL + secretPath);
 const botController = container.get(TELEGRAM_BOT_CONTROLLER);
 registerBotController(bot, botController);
 
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
+
 server.setConfig((app) => {
   app.use(json());
   app.use(urlencoded({ extended: true }));
