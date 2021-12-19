@@ -1,12 +1,12 @@
-import { promisify } from 'util';
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import path from 'path';
 import { injectable } from 'inversify';
 import ytdl from 'ytdl-core';
-import { UPLOAD_FOLDER } from '../../../constants';
+import {
+  UPLOAD_FOLDER,
+  FRAGMENT_DURATION,
+} from '../../../constants';
 import { IRemoteVideoExtractorStrategy } from '../remote-video-extractor.interface';
-
-const execAsync = promisify(exec);
 
 @injectable()
 export class YoutubeVideoExtractorService implements IRemoteVideoExtractorStrategy {
@@ -17,26 +17,36 @@ export class YoutubeVideoExtractorService implements IRemoteVideoExtractorStrate
 
   public async extract(url: string): Promise<string> {
     const info = await ytdl.getInfo(url);
-
-    const dest = path.join(UPLOAD_FOLDER, `${Date.now().toString()}.mp3`);
-
     const format = ytdl.chooseFormat(info.formats, { quality: '18' });
+    const dest = path.join(UPLOAD_FOLDER, `${Date.now().toString()}.${format.container}`);
 
-    const {
-      url: fileUrl,
-      bitrate,
-    } = format;
+    const startTime = url.split('?t=')[1] || '0';
 
-    const startTime = url.split('?t=')[1];
-    const duration = '6';
+    return new Promise<string>((resolve, reject) => {
+      const process = spawn('ffmpeg', [
+        '-i', format.url,
+        '-ss', startTime || '0',
+        '-t', FRAGMENT_DURATION,
+        '-c', 'copy',
+        dest,
+      ]);
 
-    const {
-      stdout,
-      stderr,
-    } = await execAsync(`ffmpeg -ss ${startTime || 0} -t ${duration} -i "${fileUrl}" "${dest}"`);
+      process.stdout.on('data', (data) => {
+        console.log(data);
+      });
 
-    if (stderr) console.error('Error:', stderr);
+      process.stderr.setEncoding('utf8');
+      process.stderr.on('data', (data) => {
+        console.log(data);
+      });
 
-    return dest;
+      process.on('close', () => {
+        resolve(dest);
+      });
+
+      process.on('error', (err) => {
+        reject(err);
+      });
+    });
   }
 }

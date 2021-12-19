@@ -15,3 +15,4 @@ export const METADATA_KEY = {
 };
 
 export const UPLOAD_FOLDER = `${__dirname}/uploads`;
+export const FRAGMENT_DURATION = '5';
