@@ -1,4 +1,3 @@
-import { promisify } from 'util';
 import { injectable } from 'inversify';
 import { exec } from 'child_process';
 import {
@@ -7,29 +6,27 @@ import {
   MusicDetail,
 } from '../music-recognition.interface';
 
-const execAsync = promisify(exec);
-
 @injectable()
 export class ShazamMusicRecognitionService implements IMusicRecognitionStrategy {
   public async getDetail(filePath: string): Promise<MusicDetail> {
-    const {
-      stdout,
-      stderr,
-    } = await execAsync(`songrec audio-file-to-recognized-song ${filePath}`);
-
-    if (stderr) console.error('Error:', stderr);
-
-    try {
-      const matchResult: MatchResult = JSON.parse(stdout);
-      const { subtitle, title, url } = matchResult.track;
-
-      return {
-        subtitle,
-        title,
-        url,
-      };
-    } catch (e) {
-      throw new Error('The song isn\'t recognized');
-    }
+    return new Promise<MusicDetail>((resolve, reject) => {
+      exec(`songrec audio-file-to-recognized-song ${filePath}`, (error, stdout, stderr) => {
+        if (error) {
+          console.log('Error:', error);
+          reject(error);
+        }
+        if (stderr) {
+          console.log('Stderr:', stderr);
+          reject(stderr);
+        }
+        try {
+          const matchResult: MatchResult = JSON.parse(stdout);
+          const { subtitle, title, url } = matchResult.track;
+          resolve({ subtitle, title, url });
+        } catch (e) {
+          reject(new Error('The song isn\'t recognized'));
+        }
+      });
+    });
   }
 }

@@ -25,7 +25,7 @@ export class YoutubeVideoExtractorService implements IRemoteVideoExtractorStrate
     return new Promise<string>((resolve, reject) => {
       const process = spawn('ffmpeg', [
         '-i', format.url,
-        '-ss', startTime || '0',
+        '-ss', startTime,
         '-t', FRAGMENT_DURATION,
         '-c', 'copy',
         dest,
