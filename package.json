@@ -15,7 +15,6 @@
 		"dotenv": "^10.0.0",
 		"express": "^4.17.2",
 		"inversify": "^6.0.1",
-		"inversify-express-utils": "^6.4.3",
 		"multer": "^1.4.4",
 		"reflect-metadata": "^0.1.13",
 		"telegraf": "^4.5.2",

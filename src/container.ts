@@ -1,7 +1,6 @@
 import { Container } from 'inversify';
 import {
   APP_CONFIG_SERVICE,
-  MUSIC_RECOGNITION_CONTROLLER,
   MUSIC_RECOGNITION_SERVICE,
   REMOTE_VIDEO_EXTRACTION_SERVICE,
   SHAZAM_MUSIC_RECOGNITION_SERVICE,
@@ -23,7 +22,6 @@ import {
   IMusicRecognitionStrategy,
   MusicRecognitionService,
   ShazamMusicRecognitionService,
-  MusicRecognitionController,
 } from './modules/music-recognition';
 import {
   IRemoteVideoExtractionService,
@@ -38,11 +36,6 @@ import {
 } from './modules/telegram-bot';
 
 const container = new Container();
-
-container
-  .bind(MUSIC_RECOGNITION_CONTROLLER)
-  .to(MusicRecognitionController)
-  .inSingletonScope();
 
 container
   .bind(TELEGRAM_BOT_CONTROLLER)
