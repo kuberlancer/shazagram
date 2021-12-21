@@ -5,6 +5,7 @@ import {
   MatchResult,
   MusicDetail,
 } from '../music-recognition.interface';
+import { MusicRecognitionError } from '../errors';
 
 @injectable()
 export class ShazamMusicRecognitionService implements IMusicRecognitionStrategy {
@@ -13,18 +14,18 @@ export class ShazamMusicRecognitionService implements IMusicRecognitionStrategy 
       exec(`songrec audio-file-to-recognized-song ${filePath}`, (error, stdout, stderr) => {
         if (error) {
           console.log('Error:', error);
-          reject(error);
+          reject(new MusicRecognitionError());
         }
         if (stderr) {
           console.log('Stderr:', stderr);
-          reject(stderr);
+          reject(new MusicRecognitionError());
         }
         try {
           const matchResult: MatchResult = JSON.parse(stdout);
           const { subtitle, title, url } = matchResult.track;
           resolve({ subtitle, title, url });
         } catch (e) {
-          reject(new Error('The song isn\'t recognized'));
+          reject(new MusicRecognitionError());
         }
       });
     });

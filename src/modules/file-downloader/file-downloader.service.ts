@@ -4,6 +4,7 @@ import axios from 'axios';
 import { injectable } from 'inversify';
 import { IFileDownloaderService } from './file-downloader.interface';
 import { UPLOAD_FOLDER } from '../../constants';
+import { DownloadFileError } from './errors';
 
 @injectable()
 export class FileDownloaderService implements IFileDownloaderService {
@@ -23,8 +24,8 @@ export class FileDownloaderService implements IFileDownloaderService {
         .on('finish', () => {
           resolve(filePath);
         })
-        .on('error', (error: any) => {
-          reject(error);
+        .on('error', (error: Error) => {
+          reject(new DownloadFileError());
         });
     });
   }

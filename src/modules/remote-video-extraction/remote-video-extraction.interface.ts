@@ -1,5 +1,5 @@
 export interface IRemoteVideoExtractionService {
-  isLink(url: string): boolean;
+  validateURL(url: string): void;
   extract(url: string): Promise<string>;
 }
 

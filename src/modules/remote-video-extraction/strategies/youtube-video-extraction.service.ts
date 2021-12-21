@@ -7,6 +7,7 @@ import {
   FRAGMENT_DURATION,
 } from '../../../constants';
 import { IRemoteVideoExtractionStrategy } from '../remote-video-extraction.interface';
+import { RemoteVideoExtractionError } from '../errors';
 
 @injectable()
 export class YoutubeVideoExtractionService implements IRemoteVideoExtractionStrategy {
@@ -44,8 +45,8 @@ export class YoutubeVideoExtractionService implements IRemoteVideoExtractionStra
         resolve(dest);
       });
 
-      process.on('error', (err) => {
-        reject(err);
+      process.on('error', (error) => {
+        reject(new RemoteVideoExtractionError('Failed to extract file from YouTube'));
       });
     });
   }

@@ -7,14 +7,27 @@ import {
   REMOTE_VIDEO_EXTRACTION_SERVICE,
   TELEGRAM_BOT_SERVICE,
 } from '../../constants';
-import { IFileDownloaderService } from '../file-downloader';
-import { IMusicRecognitionService } from '../music-recognition';
-import { IRemoteVideoExtractionService } from '../remote-video-extraction';
+import {
+  IFileDownloaderService,
+  DownloadFileError,
+} from '../file-downloader';
+import {
+  IMusicRecognitionService,
+  MusicRecognitionError,
+} from '../music-recognition';
+import {
+  IRemoteVideoExtractionService,
+  ValidateURLError,
+  RemoteVideoExtractionError,
+} from '../remote-video-extraction';
 import {
   botController,
   on,
 } from './telegram-bot.decorator';
 import { ITelegramBotService } from './telegram-bot.interface';
+import {
+  FileUploadError,
+} from './errors';
 
 @botController()
 export class TelegramBotController {
@@ -44,8 +57,15 @@ export class TelegramBotController {
         return;
       }
     } catch (error) {
-      console.log(error);
-      context.replyWithHTML('Error');
+      if (error instanceof ValidateURLError) {
+        context.replyWithHTML(error.message);
+      } else if (error instanceof RemoteVideoExtractionError) {
+        context.replyWithHTML(error.message);
+      } else if (error instanceof MusicRecognitionError) {
+        context.replyWithHTML(error.message);
+      } else {
+        context.replyWithHTML('An error has occurred');
+      }
     }
   }
 
@@ -62,8 +82,15 @@ export class TelegramBotController {
         return;
       }
     } catch (error) {
-      console.log(error);
-      context.replyWithHTML('Error');
+      if (error instanceof FileUploadError) {
+        context.replyWithHTML(error.message);
+      } else if (error instanceof DownloadFileError) {
+        context.replyWithHTML(error.message);
+      } else if (error instanceof MusicRecognitionError) {
+        context.replyWithHTML(error.message);
+      } else {
+        context.replyWithHTML('An error has occurred');
+      }
     }
   }
 }

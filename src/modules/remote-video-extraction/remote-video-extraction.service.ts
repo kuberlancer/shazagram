@@ -4,6 +4,10 @@ import {
   IRemoteVideoExtractionService,
   IRemoteVideoExtractionStrategy,
 } from './remote-video-extraction.interface';
+import {
+  RemoteVideoExtractionError,
+  ValidateURLError,
+} from './errors';
 
 @injectable()
 export class RemoteVideoExtractionService implements IRemoteVideoExtractionService {
@@ -12,18 +16,20 @@ export class RemoteVideoExtractionService implements IRemoteVideoExtractionServi
     private readonly youtubeVideoExtractionService: IRemoteVideoExtractionStrategy,
   ) {}
 
-  isLink(url: string): boolean {
-    return /(https?:\/\/[^\s]+)/g
-      .test(url);
+  validateURL(url: string): void {
+    const regExp = /(https?:\/\/[^\s]+)/g;
+    if (!regExp.test(url)) {
+      throw new ValidateURLError();
+    }
   }
 
   public extract(url: string): Promise<string> {
-    if (!this.isLink(url)) throw Error('This is not link');
+    this.validateURL(url);
 
     if (this.youtubeVideoExtractionService.isAppropriateStrategy(url)) {
       return this.youtubeVideoExtractionService.extract(url);
     }
 
-    throw new Error('This link is not supported');
+    throw new RemoteVideoExtractionError();
   }
 }

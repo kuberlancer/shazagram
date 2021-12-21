@@ -2,6 +2,9 @@ import { injectable } from 'inversify';
 import { Message } from 'typegram';
 import { MusicDetail } from '../music-recognition';
 import { ITelegramBotService } from './telegram-bot.interface';
+import {
+  FileUploadError,
+} from './errors';
 
 @injectable()
 export class TelegramBotService implements ITelegramBotService {
@@ -30,7 +33,7 @@ export class TelegramBotService implements ITelegramBotService {
       return (message as Message.DocumentMessage).document.file_id;
     }
 
-    throw new Error('File is not supported');
+    throw new FileUploadError();
   }
 
   public detailToHTML(detail: MusicDetail): string {
