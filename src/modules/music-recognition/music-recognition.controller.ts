@@ -10,11 +10,11 @@ import {
 } from 'inversify-express-utils';
 import {
   MUSIC_RECOGNITION_SERVICE,
-  REMOTE_VIDEO_EXTRACTOR_SERVICE,
+  REMOTE_VIDEO_EXTRACTION_SERVICE,
 } from '../../constants';
 import {
-  IRemoteVideoExtractorService,
-} from '../remote-video-extractor';
+  IRemoteVideoExtractionService,
+} from '../remote-video-extraction';
 import {
   IMusicRecognitionService,
   MusicDetail,
@@ -23,8 +23,8 @@ import {
 @controller('/recognition')
 export class MusicRecognitionController implements interfaces.Controller {
   constructor(
-    @inject(REMOTE_VIDEO_EXTRACTOR_SERVICE)
-    private readonly remoteVideoExtractorService: IRemoteVideoExtractorService,
+    @inject(REMOTE_VIDEO_EXTRACTION_SERVICE)
+    private readonly remoteVideoExtractionService: IRemoteVideoExtractionService,
 
     @inject(MUSIC_RECOGNITION_SERVICE)
     private readonly musicRecognitionService: IMusicRecognitionService,

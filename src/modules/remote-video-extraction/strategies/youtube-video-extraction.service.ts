@@ -6,10 +6,10 @@ import {
   UPLOAD_FOLDER,
   FRAGMENT_DURATION,
 } from '../../../constants';
-import { IRemoteVideoExtractorStrategy } from '../remote-video-extractor.interface';
+import { IRemoteVideoExtractionStrategy } from '../remote-video-extraction.interface';
 
 @injectable()
-export class YoutubeVideoExtractorService implements IRemoteVideoExtractorStrategy {
+export class YoutubeVideoExtractionService implements IRemoteVideoExtractionStrategy {
   public isAppropriateStrategy(url: string): boolean {
     return /(?:https?:\/\/)?(?:(?:(?:www\.?)?youtube\.com(?:\/(?:(?:watch\?.*?(v=[^&\s]+).*)|(?:v(\/.*))|(channel\/.+)|(?:user\/(.+))|(?:results\?(search_query=.+))))?)|(?:youtu\.be(\/.*)?))/g
       .test(url);

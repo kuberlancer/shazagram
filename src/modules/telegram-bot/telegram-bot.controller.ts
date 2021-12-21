@@ -4,12 +4,12 @@ import { Message } from 'typegram';
 import {
   FILE_DOWNLOADER_SERVICE,
   MUSIC_RECOGNITION_SERVICE,
-  REMOTE_VIDEO_EXTRACTOR_SERVICE,
+  REMOTE_VIDEO_EXTRACTION_SERVICE,
   TELEGRAM_BOT_SERVICE,
 } from '../../constants';
 import { IFileDownloaderService } from '../file-downloader';
 import { IMusicRecognitionService } from '../music-recognition';
-import { IRemoteVideoExtractorService } from '../remote-video-extractor';
+import { IRemoteVideoExtractionService } from '../remote-video-extraction';
 import {
   botController,
   on,
@@ -28,8 +28,8 @@ export class TelegramBotController {
     @inject(FILE_DOWNLOADER_SERVICE)
     private readonly fileDownloaderService: IFileDownloaderService,
 
-    @inject(REMOTE_VIDEO_EXTRACTOR_SERVICE)
-    private readonly remoteVideoExtractorService: IRemoteVideoExtractorService,
+    @inject(REMOTE_VIDEO_EXTRACTION_SERVICE)
+    private readonly remoteVideoExtractionService: IRemoteVideoExtractionService,
   ) {}
 
   @on('text')
@@ -37,7 +37,7 @@ export class TelegramBotController {
     try {
       if (context.message && (context.message as Message.TextMessage).text) {
         const textLink = (context.message as Message.TextMessage).text;
-        const filePath = await this.remoteVideoExtractorService.extract(textLink);
+        const filePath = await this.remoteVideoExtractionService.extract(textLink);
         const detail = await this.musicRecognitionService.getDetail(filePath);
         const response = this.telegramBotService.detailToHTML(detail);
         context.replyWithHTML(response);

@@ -3,9 +3,9 @@ import {
   APP_CONFIG_SERVICE,
   MUSIC_RECOGNITION_CONTROLLER,
   MUSIC_RECOGNITION_SERVICE,
-  REMOTE_VIDEO_EXTRACTOR_SERVICE,
+  REMOTE_VIDEO_EXTRACTION_SERVICE,
   SHAZAM_MUSIC_RECOGNITION_SERVICE,
-  YOUTUBE_VIDEO_EXTRACTOR_SERVICE,
+  YOUTUBE_VIDEO_EXTRACTION_SERVICE,
   TELEGRAM_BOT_CONTROLLER,
   TELEGRAM_BOT_SERVICE,
   FILE_DOWNLOADER_SERVICE,
@@ -26,11 +26,11 @@ import {
   MusicRecognitionController,
 } from './modules/music-recognition';
 import {
-  IRemoteVideoExtractorService,
-  IRemoteVideoExtractorStrategy,
-  RemoteVideoExtractorService,
-  YoutubeVideoExtractorService,
-} from './modules/remote-video-extractor';
+  IRemoteVideoExtractionService,
+  IRemoteVideoExtractionStrategy,
+  RemoteVideoExtractionService,
+  YoutubeVideoExtractionService,
+} from './modules/remote-video-extraction';
 import {
   ITelegramBotService,
   TelegramBotController,
@@ -55,13 +55,13 @@ container
   .inSingletonScope();
 
 container
-  .bind<IRemoteVideoExtractorService>(REMOTE_VIDEO_EXTRACTOR_SERVICE)
-  .to(RemoteVideoExtractorService)
+  .bind<IRemoteVideoExtractionService>(REMOTE_VIDEO_EXTRACTION_SERVICE)
+  .to(RemoteVideoExtractionService)
   .inSingletonScope();
 
 container
-  .bind<IRemoteVideoExtractorStrategy>(YOUTUBE_VIDEO_EXTRACTOR_SERVICE)
-  .to(YoutubeVideoExtractorService)
+  .bind<IRemoteVideoExtractionStrategy>(YOUTUBE_VIDEO_EXTRACTION_SERVICE)
+  .to(YoutubeVideoExtractionService)
   .inSingletonScope();
 
 container
