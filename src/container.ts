@@ -8,6 +8,7 @@ import {
   TELEGRAM_BOT_CONTROLLER,
   TELEGRAM_BOT_SERVICE,
   FILE_DOWNLOADER_SERVICE,
+  LOGGER_SERVICE,
 } from './constants';
 import {
   IAppConfigService,
@@ -34,6 +35,10 @@ import {
   TelegramBotController,
   TelegramBotService,
 } from './modules/telegram-bot';
+import {
+  ILoggerService,
+  LoggerService,
+} from './modules/logger';
 
 const container = new Container();
 
@@ -75,6 +80,11 @@ container
 container
   .bind<IFileDownloaderService>(FILE_DOWNLOADER_SERVICE)
   .to(FileDownloaderService)
+  .inSingletonScope();
+
+container
+  .bind<ILoggerService>(LOGGER_SERVICE)
+  .to(LoggerService)
   .inSingletonScope();
 
 export { container };

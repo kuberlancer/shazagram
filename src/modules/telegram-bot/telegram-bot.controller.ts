@@ -6,6 +6,7 @@ import {
   MUSIC_RECOGNITION_SERVICE,
   REMOTE_VIDEO_EXTRACTION_SERVICE,
   TELEGRAM_BOT_SERVICE,
+  LOGGER_SERVICE,
 } from '../../constants';
 import {
   IFileDownloaderService,
@@ -28,6 +29,9 @@ import { ITelegramBotService } from './telegram-bot.interface';
 import {
   FileUploadError,
 } from './errors';
+import {
+  ILoggerService,
+} from '../logger';
 
 @botController()
 export class TelegramBotController {
@@ -43,6 +47,9 @@ export class TelegramBotController {
 
     @inject(REMOTE_VIDEO_EXTRACTION_SERVICE)
     private readonly remoteVideoExtractionService: IRemoteVideoExtractionService,
+
+    @inject(LOGGER_SERVICE)
+    private readonly loggerService: ILoggerService,
   ) {}
 
   @on('text')
@@ -66,6 +73,7 @@ export class TelegramBotController {
       } else {
         context.replyWithHTML('An error has occurred');
       }
+      this.loggerService.log(error);
     }
   }
 
@@ -91,6 +99,7 @@ export class TelegramBotController {
       } else {
         context.replyWithHTML('An error has occurred');
       }
+      this.loggerService.log(error);
     }
   }
 }
