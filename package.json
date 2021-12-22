@@ -1,12 +1,17 @@
 {
-	"name": "music-recognition-bot",
+	"name": "shazagram",
 	"version": "0.1.0",
 	"main": "dist/app.js",
 	"license": "MIT",
 	"private": true,
+	"bin": {
+		"shazagram": "dist/app.js"
+	},
+	"files": [
+		"/dist"
+	],
 	"scripts": {
-		"tsc": "tsc",
-		"postinstall": "npm run tsc",
+		"build": "yarn tsc --build --verbose",
 		"start": "NODE_ENV=production node .",
 		"start:dev": "cross-env NODE_ENV=development nodemon --watch src -e ts --exec \"(tsc && node .) || exit 1\"",
 		"test": "jest"
