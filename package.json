@@ -6,11 +6,13 @@
 	"private": true,
 	"scripts": {
 		"build": "tsc",
-		"start": "tsc && node .",
-		"start:dev": "nodemon --watch src -e ts --exec \"(tsc && node .) || exit 1\"",
+		"start": "tsc && cross-env NODE_ENV=production node .",
+		"start:dev": "cross-env NODE_ENV=development nodemon --watch src -e ts --exec \"(tsc && node .) || exit 1\"",
 		"test": "jest"
 	},
 	"dependencies": {
+		"@sentry/node": "^6.16.1",
+		"@sentry/tracing": "^6.16.1",
 		"axios": "^0.24.0",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.2",
@@ -30,6 +32,7 @@
 		"@types/supertest": "^2.0.11",
 		"@typescript-eslint/eslint-plugin": "^5.7.0",
 		"@typescript-eslint/parser": "^5.7.0",
+		"cross-env": "^7.0.3",
 		"eslint": "^8.5.0",
 		"eslint-config-airbnb-typescript": "^16.1.0",
 		"eslint-plugin-import": "^2.25.3",
