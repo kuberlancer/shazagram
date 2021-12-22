@@ -38,6 +38,6 @@ app.use(multer({
 }).single('music'));
 app.use(bot.webhookCallback(secretPath));
 
-app.listen(5000, () => {
+app.listen(config.PORT, () => {
   console.log('App is running');
 });

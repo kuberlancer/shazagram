@@ -9,6 +9,8 @@ export class AppConfigService implements IAppConfigService {
 
   public readonly SENTRY_DSN = process.env.SENTRY_DSN ?? '';
 
+  public readonly PORT = process.env.PORT ?? '80';
+
   public isProduction(): boolean {
     return process.env.NODE_ENV === 'production';
   }

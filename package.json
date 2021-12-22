@@ -5,8 +5,9 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"build": "tsc",
-		"start": "tsc && cross-env NODE_ENV=production node .",
+		"tsc": "tsc",
+		"postinstall": "npm run tsc",
+		"start": "NODE_ENV=production node .",
 		"start:dev": "cross-env NODE_ENV=development nodemon --watch src -e ts --exec \"(tsc && node .) || exit 1\"",
 		"test": "jest"
 	},
