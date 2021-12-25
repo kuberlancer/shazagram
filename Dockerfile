@@ -1,18 +1,17 @@
-FROM node:16.13-alpine as build-env
+FROM node:16.13-alpine AS build-env
 WORKDIR /shazagram
 COPY ["package.json", "yarn.lock", "./"]
 RUN yarn install
 COPY . .
 RUN yarn build
 
-FROM node:16.13-alpine as clean-env
+FROM node:16.13-alpine AS clean-env
 COPY --from=build-env /shazagram/dist /shazagram
 COPY --from=build-env /shazagram/package*.json /shazagram/
 WORKDIR /shazagram
 RUN yarn install --production 
 
-FROM gcr.io/distroless/nodejs:16
-
+FROM ubuntu:20.04
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 
@@ -29,6 +28,15 @@ ARG PORT=3000
 ENV PORT $PORT
 EXPOSE $PORT
 
+RUN apt-get update && \
+  apt-get install -y software-properties-common && \
+  apt-add-repository ppa:marin-m/songrec -y && \
+  apt-get install -y \
+  curl \
+  songrec \
+  ffmpeg && \
+  curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+  apt-get install -y nodejs
+
 COPY --from=clean-env /shazagram /shazagram
-WORKDIR /shazagram
-ENTRYPOINT ["/nodejs/bin/node", "app.js"]
+CMD ["node", "shazagram/app.js"]
