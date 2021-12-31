@@ -1,3 +1,4 @@
+import { Context } from 'telegraf';
 import { MaybeArray } from 'telegraf/typings/composer';
 import {
   MessageSubType,
@@ -17,4 +18,9 @@ export interface IBotControllerMethodMetadata {
 export interface ITelegramBotService {
   getFileId(message: Message): string;
   detailToHTML(detail: MusicDetail): string;
+  updateMessageFactory(context: Context): (text: string) => Promise<void>;
 }
+
+export type ContextWithMessage = Context & {
+  message: Message.TextMessage
+};

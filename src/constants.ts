@@ -16,3 +16,10 @@ export const METADATA_KEY = {
 
 export const UPLOAD_FOLDER = `${__dirname}/uploads`;
 export const FRAGMENT_DURATION = '5';
+
+export const MESSAGES = {
+  EXTRACTING: 'Extracting from remote server...',
+  RECOGNITION: 'Recognition...',
+  DOWNLOADING: 'Downloading file...',
+  UNKNOWN_ERROR: 'An error has occurred',
+};

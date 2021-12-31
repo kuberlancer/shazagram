@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
 import { Message } from 'typegram';
+import { Context } from 'telegraf';
 import { MusicDetail } from '../music-recognition';
 import { ITelegramBotService } from './telegram-bot.interface';
 import {
@@ -42,6 +43,25 @@ export class TelegramBotService implements ITelegramBotService {
       title,
       url,
     } = detail;
-    return `<b>${subtitle} - ${title}\r\n${url}</b>`;
+    return `${subtitle} - ${title}\r\n${url}`;
+  }
+
+  public updateMessageFactory(context: Context) {
+    let message: Message.TextMessage | undefined;
+
+    return async (text: string) => {
+      if (!message) {
+        message = await context.reply(text);
+        return;
+      }
+      if (context.chat && context.chat.id) {
+        await context.telegram.editMessageText(
+          context.chat.id,
+          message.message_id,
+          undefined,
+          text,
+        );
+      }
+    };
   }
 }
