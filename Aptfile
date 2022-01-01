@@ -1,0 +1,4 @@
+build-essential
+libasound2-dev
+libgtk-3-dev
+libssl-dev

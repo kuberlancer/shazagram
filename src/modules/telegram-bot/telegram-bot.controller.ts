@@ -1,12 +1,11 @@
 import { inject } from 'inversify';
-import { Context } from 'telegraf';
-import { Message } from 'typegram';
 import {
   FILE_DOWNLOADER_SERVICE,
   MUSIC_RECOGNITION_SERVICE,
   REMOTE_VIDEO_EXTRACTION_SERVICE,
   TELEGRAM_BOT_SERVICE,
   LOGGER_SERVICE,
+  MESSAGES,
 } from '../../constants';
 import {
   IFileDownloaderService,
@@ -25,7 +24,10 @@ import {
   botController,
   on,
 } from './telegram-bot.decorator';
-import { ITelegramBotService } from './telegram-bot.interface';
+import {
+  ITelegramBotService,
+  ContextWithMessage,
+} from './telegram-bot.interface';
 import {
   FileUploadError,
 } from './errors';
@@ -53,51 +55,55 @@ export class TelegramBotController {
   ) {}
 
   @on('text')
-  public async receiveTextLink(context: Context): Promise<void> {
+  public async receiveTextLink(context: ContextWithMessage): Promise<void> {
+    const updateMessage = this.telegramBotService.updateMessageFactory(context);
     try {
-      if (context.message && (context.message as Message.TextMessage).text) {
-        const textLink = (context.message as Message.TextMessage).text;
-        const filePath = await this.remoteVideoExtractionService.extract(textLink);
-        const detail = await this.musicRecognitionService.getDetail(filePath);
-        const response = this.telegramBotService.detailToHTML(detail);
-        context.replyWithHTML(response);
-        return;
-      }
+      await updateMessage(MESSAGES.EXTRACTING);
+      const textLink = context.message.text;
+      const filePath = await this.remoteVideoExtractionService.extract(textLink);
+
+      await updateMessage(MESSAGES.RECOGNITION);
+      const detail = await this.musicRecognitionService.getDetail(filePath);
+      const response = this.telegramBotService.detailToHTML(detail);
+
+      await updateMessage(response);
     } catch (error) {
       if (error instanceof ValidateURLError) {
-        context.replyWithHTML(error.message);
+        await updateMessage(error.message);
       } else if (error instanceof RemoteVideoExtractionError) {
-        context.replyWithHTML(error.message);
+        await updateMessage(error.message);
       } else if (error instanceof MusicRecognitionError) {
-        context.replyWithHTML(error.message);
+        await updateMessage(error.message);
       } else {
-        context.replyWithHTML('An error has occurred');
+        await updateMessage(MESSAGES.UNKNOWN_ERROR);
       }
       this.loggerService.log(error);
     }
   }
 
   @on('message')
-  public async receiveFile(context: Context): Promise<void> {
+  public async receiveFile(context: ContextWithMessage): Promise<void> {
+    const updateMessage = this.telegramBotService.updateMessageFactory(context);
     try {
-      if (context.message) {
-        const fileId = this.telegramBotService.getFileId(context.message);
-        const fileLink = await context.telegram.getFileLink(fileId);
-        const filePath = await this.fileDownloaderService.download(fileLink.href);
-        const detail = await this.musicRecognitionService.getDetail(filePath as string);
-        const response = this.telegramBotService.detailToHTML(detail);
-        context.replyWithHTML(response);
-        return;
-      }
+      await updateMessage(MESSAGES.DOWNLOADING);
+      const fileId = this.telegramBotService.getFileId(context.message);
+      const fileLink = await context.telegram.getFileLink(fileId);
+      const filePath = await this.fileDownloaderService.download(fileLink.href);
+
+      await updateMessage(MESSAGES.RECOGNITION);
+      const detail = await this.musicRecognitionService.getDetail(filePath as string);
+      const response = this.telegramBotService.detailToHTML(detail);
+
+      await updateMessage(response);
     } catch (error) {
       if (error instanceof FileUploadError) {
-        context.replyWithHTML(error.message);
+        await updateMessage(error.message);
       } else if (error instanceof DownloadFileError) {
-        context.replyWithHTML(error.message);
+        await updateMessage(error.message);
       } else if (error instanceof MusicRecognitionError) {
-        context.replyWithHTML(error.message);
+        await updateMessage(error.message);
       } else {
-        context.replyWithHTML('An error has occurred');
+        await updateMessage(MESSAGES.UNKNOWN_ERROR);
       }
       this.loggerService.log(error);
     }
