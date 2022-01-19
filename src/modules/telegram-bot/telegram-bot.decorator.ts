@@ -2,6 +2,7 @@ import { decorate, injectable } from 'inversify';
 import {
   UpdateType,
   IBotControllerMethodMetadata,
+  Method,
 } from './telegram-bot.interface';
 import { METADATA_KEY } from '../../constants';
 
@@ -13,7 +14,7 @@ export function botController(): ClassDecorator {
   };
 }
 
-function botMethod(method: string, updateType: UpdateType): MethodDecorator {
+function botMethod(method: Method, updateType?: UpdateType): MethodDecorator {
   return function (target, propertyKey) {
     let methodList: Array<IBotControllerMethodMetadata> = [];
 
@@ -38,6 +39,10 @@ function botMethod(method: string, updateType: UpdateType): MethodDecorator {
 
     return target;
   };
+}
+
+export function start(): MethodDecorator {
+  return botMethod('start');
 }
 
 export function on(updateType: UpdateType): MethodDecorator {

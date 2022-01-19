@@ -22,6 +22,7 @@ import {
 } from '../remote-video-extraction';
 import {
   botController,
+  start,
   on,
 } from './telegram-bot.decorator';
 import {
@@ -53,6 +54,17 @@ export class TelegramBotController {
     @inject(LOGGER_SERVICE)
     private readonly loggerService: ILoggerService,
   ) {}
+
+  @start()
+  public async startBot(context: ContextWithMessage): Promise<void> {
+    const updateMessage = this.telegramBotService.updateMessageFactory(context);
+    try {
+      await updateMessage('Hello!');
+    } catch (error) {
+      await updateMessage((error as Error).message);
+      this.loggerService.log(error);
+    }
+  }
 
   @on('text')
   public async receiveTextLink(context: ContextWithMessage): Promise<void> {

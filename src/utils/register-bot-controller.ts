@@ -16,7 +16,9 @@ export function registerBotController(
 ): void {
   const botMethodList = getBotControllerMethodListFromMetadata();
   botMethodList.forEach(({ method, updateType, propertyKey }) => {
-    if (method === 'on') {
+    if (method === 'start') {
+      bot.start(botController[propertyKey].bind(botController));
+    } else if (method === 'on' && updateType) {
       bot.on(updateType, botController[propertyKey].bind(botController));
     }
   });

@@ -1,4 +1,4 @@
-import { Context } from 'telegraf';
+import type { Telegraf, Context } from 'telegraf';
 import { MaybeArray } from 'telegraf/typings/composer';
 import {
   MessageSubType,
@@ -9,9 +9,11 @@ import { MusicDetail } from '../music-recognition';
 
 export type UpdateType = MaybeArray<_UpdateType | MessageSubType>;
 
+export type Method = keyof Telegraf;
+
 export interface IBotControllerMethodMetadata {
-  method: string;
-  updateType: UpdateType;
+  method: Method;
+  updateType?: UpdateType;
   propertyKey: string | symbol;
 }
 
