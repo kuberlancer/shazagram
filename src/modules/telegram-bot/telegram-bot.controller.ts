@@ -5,7 +5,9 @@ import {
   REMOTE_VIDEO_EXTRACTION_SERVICE,
   TELEGRAM_BOT_SERVICE,
   LOGGER_SERVICE,
-  MESSAGES,
+  messages,
+  ANALYTICS_SERVICE,
+  goals,
 } from '../../constants';
 import {
   IFileDownloaderService,
@@ -28,6 +30,7 @@ import {
 import {
   ITelegramBotService,
   ContextWithMessage,
+  ContextWithStartPayload,
 } from './telegram-bot.interface';
 import {
   FileUploadError,
@@ -35,6 +38,9 @@ import {
 import {
   ILoggerService,
 } from '../logger';
+import {
+  IAnalyticsService,
+} from '../analytics';
 
 @botController()
 export class TelegramBotController {
@@ -53,16 +59,26 @@ export class TelegramBotController {
 
     @inject(LOGGER_SERVICE)
     private readonly loggerService: ILoggerService,
+
+    @inject(ANALYTICS_SERVICE)
+    private readonly analyticsService: IAnalyticsService,
   ) {}
 
   @start()
-  public async startBot(context: ContextWithMessage): Promise<void> {
+  public async startBot(context: ContextWithMessage & ContextWithStartPayload): Promise<void> {
     const updateMessage = this.telegramBotService.updateMessageFactory(context);
     try {
       await updateMessage('Hello!');
     } catch (error) {
-      await updateMessage((error as Error).message);
+      await updateMessage(messages.UNKNOWN_ERROR);
       this.loggerService.log(error);
+    } finally {
+      this.analyticsService.event(
+        context.message.from.id,
+        goals.categories.SHAZAGRAM,
+        goals.actions.START_BOT,
+        context.startPayload,
+      );
     }
   }
 
@@ -70,11 +86,11 @@ export class TelegramBotController {
   public async receiveTextLink(context: ContextWithMessage): Promise<void> {
     const updateMessage = this.telegramBotService.updateMessageFactory(context);
     try {
-      await updateMessage(MESSAGES.EXTRACTING);
+      await updateMessage(messages.EXTRACTING);
       const textLink = context.message.text;
       const filePath = await this.remoteVideoExtractionService.extract(textLink);
 
-      await updateMessage(MESSAGES.RECOGNITION);
+      await updateMessage(messages.RECOGNITION);
       const detail = await this.musicRecognitionService.getDetail(filePath);
       const response = this.telegramBotService.detailToHTML(detail);
 
@@ -87,9 +103,15 @@ export class TelegramBotController {
       } else if (error instanceof MusicRecognitionError) {
         await updateMessage(error.message);
       } else {
-        await updateMessage(MESSAGES.UNKNOWN_ERROR);
+        await updateMessage(messages.UNKNOWN_ERROR);
       }
       this.loggerService.log(error);
+    } finally {
+      this.analyticsService.event(
+        context.message.from.id,
+        goals.categories.SHAZAGRAM,
+        goals.actions.SEND_LINK,
+      );
     }
   }
 
@@ -97,12 +119,12 @@ export class TelegramBotController {
   public async receiveFile(context: ContextWithMessage): Promise<void> {
     const updateMessage = this.telegramBotService.updateMessageFactory(context);
     try {
-      await updateMessage(MESSAGES.DOWNLOADING);
+      await updateMessage(messages.DOWNLOADING);
       const fileId = this.telegramBotService.getFileId(context.message);
       const fileLink = await context.telegram.getFileLink(fileId);
       const filePath = await this.fileDownloaderService.download(fileLink.href);
 
-      await updateMessage(MESSAGES.RECOGNITION);
+      await updateMessage(messages.RECOGNITION);
       const detail = await this.musicRecognitionService.getDetail(filePath as string);
       const response = this.telegramBotService.detailToHTML(detail);
 
@@ -115,9 +137,15 @@ export class TelegramBotController {
       } else if (error instanceof MusicRecognitionError) {
         await updateMessage(error.message);
       } else {
-        await updateMessage(MESSAGES.UNKNOWN_ERROR);
+        await updateMessage(messages.UNKNOWN_ERROR);
       }
       this.loggerService.log(error);
+    } finally {
+      this.analyticsService.event(
+        context.message.from.id,
+        goals.categories.SHAZAGRAM,
+        goals.actions.SEND_FILE,
+      );
     }
   }
 }

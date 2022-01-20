@@ -11,6 +11,8 @@ export class AppConfigService implements IAppConfigService {
 
   public readonly PORT = process.env.PORT ?? '80';
 
+  public readonly GOOGLE_ANALYTICS_PROJECT_ID = process.env.GOOGLE_ANALYTICS_PROJECT_ID ?? '';
+
   public isProduction(): boolean {
     return process.env.NODE_ENV === 'production';
   }

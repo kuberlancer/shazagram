@@ -9,6 +9,7 @@ import {
   TELEGRAM_BOT_SERVICE,
   FILE_DOWNLOADER_SERVICE,
   LOGGER_SERVICE,
+  ANALYTICS_SERVICE,
 } from './constants';
 import {
   IAppConfigService,
@@ -39,6 +40,10 @@ import {
   ILoggerService,
   LoggerService,
 } from './modules/logger';
+import {
+  IAnalyticsService,
+  AnalyticsService,
+} from './modules/analytics';
 
 const container = new Container();
 
@@ -85,6 +90,11 @@ container
 container
   .bind<ILoggerService>(LOGGER_SERVICE)
   .to(LoggerService)
+  .inSingletonScope();
+
+container
+  .bind<IAnalyticsService>(ANALYTICS_SERVICE)
+  .to(AnalyticsService)
   .inSingletonScope();
 
 export { container };

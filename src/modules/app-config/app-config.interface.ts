@@ -3,5 +3,6 @@ export interface IAppConfigService {
   API_URL: string;
   PORT: string;
   SENTRY_DSN: string;
+  GOOGLE_ANALYTICS_PROJECT_ID: string;
   isProduction(): boolean;
 }

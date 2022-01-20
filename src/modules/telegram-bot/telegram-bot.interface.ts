@@ -26,3 +26,7 @@ export interface ITelegramBotService {
 export type ContextWithMessage = Context & {
   message: Message.TextMessage
 };
+
+export type ContextWithStartPayload = Context & {
+  startPayload?: string;
+};
