@@ -30,6 +30,6 @@ export class RemoteVideoExtractionService implements IRemoteVideoExtractionServi
       return this.youtubeVideoExtractionService.extract(url);
     }
 
-    throw new RemoteVideoExtractionError();
+    throw new RemoteVideoExtractionError('This resource is not supported yet');
   }
 }
