@@ -27,7 +27,7 @@
 		"reflect-metadata": "^0.1.13",
 		"telegraf": "^4.5.2",
 		"universal-analytics": "^0.5.3",
-		"ytdl-core": "^4.10.1"
+		"ytdl-core": "^4.11.0"
 	},
 	"devDependencies": {
 		"@babel/plugin-proposal-decorators": "^7.16.5",
