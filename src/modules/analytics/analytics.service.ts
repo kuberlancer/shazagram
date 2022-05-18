@@ -26,6 +26,16 @@ export class AnalyticsService implements IAnalyticsService {
   ): void {
     const { GOOGLE_ANALYTICS_PROJECT_ID: projectId } = this.appConfig;
 
+    if (!projectId) {
+      console.table({
+        category,
+        action,
+        label,
+      });
+
+      return;
+    }
+
     const visitor = ua(projectId, userId.toString(), {
       strictCidFormat: false,
     });

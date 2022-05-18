@@ -11,14 +11,16 @@ export class LoggerService implements ILoggerService {
     @inject(APP_CONFIG_SERVICE)
     private readonly appConfig: IAppConfigService,
   ) {
-    Sentry.init({
-      dsn: appConfig.SENTRY_DSN,
-      tracesSampleRate: 1.0,
-    });
+    if (appConfig.SENTRY_DSN) {
+      Sentry.init({
+        dsn: appConfig.SENTRY_DSN,
+        tracesSampleRate: 1.0,
+      });
+    }
   }
 
   public log(...args: unknown[]): void {
-    if (this.appConfig.isProduction()) {
+    if (this.appConfig.SENTRY_DSN && this.appConfig.isProduction()) {
       const error = args[0] as Error;
 
       const transaction = Sentry.startTransaction({
